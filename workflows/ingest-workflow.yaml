@@ -1,0 +1,45 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: rag-ingest-workflow
+  labels:
+    scenarios.ai.sap.com/id: "rag-chatbot-scenario"
+    ai.sap.com/version: "1.0.0"
+spec:
+  templates:
+    - name: ingest-docs
+      container:
+        image: "docker.io/COMPANY_DOCKERHUB_USERNAME/sap-aicore-demo:latest"
+        command: ["python", "ingest.py"]
+        env:
+          - name: MINIO_ENDPOINT
+            valueFrom:
+              secretKeyRef:
+                name: aicore-secret
+                key: MINIO_ENDPOINT
+          - name: MINIO_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: aicore-secret
+                key: MINIO_ACCESS_KEY
+          - name: MINIO_SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: aicore-secret
+                key: MINIO_SECRET_KEY
+          - name: AICORE_AUTH_URL
+            valueFrom:
+              secretKeyRef:
+                name: aicore-secret
+                key: AICORE_AUTH_URL
+          - name: AICORE_CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                name: aicore-secret
+                key: AICORE_CLIENT_ID
+          - name: AICORE_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: aicore-secret
+                key: AICORE_CLIENT_SECRET
+  entrypoint: ingest-docs

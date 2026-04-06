@@ -1,0 +1,17 @@
+# Secrets — never commit these
+.env
+*.json
+ai_core_credentials.json
+secrets/
+*.env
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# ChromaDB local data
+chroma_db/
+
+# OS
+.DS_Store
