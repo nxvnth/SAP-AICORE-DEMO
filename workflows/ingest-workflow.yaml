@@ -2,6 +2,10 @@ apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
   name: rag-ingest-workflow
+  annotations:
+    scenarios.ai.sap.com/name: "rag-chatbot-scenario"
+    executables.ai.sap.com/name: "rag-ingest-exec"
+    executables.ai.sap.com/description: "Document ingestion workflow"
   labels:
     scenarios.ai.sap.com/id: "rag-chatbot-scenario"
     ai.sap.com/version: "1.0.0"
