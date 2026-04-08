@@ -2,65 +2,72 @@ apiVersion: ai.sap.com/v1alpha1
 kind: ServingTemplate
 metadata:
   name: rag-serving-template
+  annotations:
+    scenarios.ai.sap.com/description: "RAG Chatbot Demo"
+    scenarios.ai.sap.com/name: "rag-chatbot-scenario"
+    executables.ai.sap.com/description: "RAG chatbot serving executable"
+    executables.ai.sap.com/name: "rag-serving-exec"
   labels:
     scenarios.ai.sap.com/id: "rag-chatbot-scenario"
     ai.sap.com/version: "1.0.0"
 spec:
   template:
-    apiVersion: serving.kserve.io/v1beta1
+    apiVersion: "serving.kserve.io/v1beta1"
     metadata:
-      annotations:
+      annotations: |
         autoscaling.knative.dev/metric: concurrency
-        autoscaling.knative.dev/target: "1"
-        autoscaling.knative.dev/targetUtilizationPercentage: "100"
-    spec:
+        autoscaling.knative.dev/target: 1
+        autoscaling.knative.dev/targetUtilizationPercentage: 100
+    spec: |
       predictor:
         imagePullSecrets:
           - name: docker-registry-secret
+        minReplicas: 0
+        maxReplicas: 1
         containers:
-          - name: kserve-container
-            image: "docker.io/jbsahasra2020/sap-aicore-demo:latest"
-            ports:
-              - containerPort: 8080
-                protocol: TCP
-            env:
-              - name: AICORE_AUTH_URL
-                valueFrom:
-                  secretKeyRef:
-                    name: aicore-secret
-                    key: AICORE_AUTH_URL
-              - name: AICORE_CLIENT_ID
-                valueFrom:
-                  secretKeyRef:
-                    name: aicore-secret
-                    key: AICORE_CLIENT_ID
-              - name: AICORE_CLIENT_SECRET
-                valueFrom:
-                  secretKeyRef:
-                    name: aicore-secret
-                    key: AICORE_CLIENT_SECRET
-              - name: MINIO_ENDPOINT
-                valueFrom:
-                  secretKeyRef:
-                    name: aicore-secret
-                    key: MINIO_ENDPOINT
-              - name: MINIO_ACCESS_KEY
-                valueFrom:
-                  secretKeyRef:
-                    name: aicore-secret
-                    key: MINIO_ACCESS_KEY
-              - name: MINIO_SECRET_KEY
-                valueFrom:
-                  secretKeyRef:
-                    name: aicore-secret
-                    key: MINIO_SECRET_KEY
-              - name: CHROMA_HOST
-                valueFrom:
-                  secretKeyRef:
-                    name: aicore-secret
-                    key: CHROMA_HOST
-              - name: CHROMA_PORT
-                valueFrom:
-                  secretKeyRef:
-                    name: aicore-secret
-                    key: CHROMA_PORT
+        - name: kserve-container
+          image: docker.io/jbsahasra2020/sap-aicore-demo:latest
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          env:
+          - name: AICORE_AUTH_URL
+            valueFrom:
+              secretKeyRef:
+                name: aicore-secret
+                key: AICORE_AUTH_URL
+          - name: AICORE_CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                name: aicore-secret
+                key: AICORE_CLIENT_ID
+          - name: AICORE_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: aicore-secret
+                key: AICORE_CLIENT_SECRET
+          - name: MINIO_ENDPOINT
+            valueFrom:
+              secretKeyRef:
+                name: aicore-secret
+                key: MINIO_ENDPOINT
+          - name: MINIO_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: aicore-secret
+                key: MINIO_ACCESS_KEY
+          - name: MINIO_SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: aicore-secret
+                key: MINIO_SECRET_KEY
+          - name: CHROMA_HOST
+            valueFrom:
+              secretKeyRef:
+                name: aicore-secret
+                key: CHROMA_HOST
+          - name: CHROMA_PORT
+            valueFrom:
+              secretKeyRef:
+                name: aicore-secret
+                key: CHROMA_PORT
