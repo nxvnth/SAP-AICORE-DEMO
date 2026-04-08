@@ -13,7 +13,7 @@ metadata:
 spec:
   template:
     apiVersion: "serving.kserve.io/v1beta1"
-    spec: |
+    spec: |-
       predictor:
         imagePullSecrets:
           - name: docker-registry-secret
