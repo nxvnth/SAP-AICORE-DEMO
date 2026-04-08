@@ -13,11 +13,6 @@ metadata:
 spec:
   template:
     apiVersion: "serving.kserve.io/v1beta1"
-    metadata:
-      annotations: |
-        autoscaling.knative.dev/metric: concurrency
-        autoscaling.knative.dev/target: 1
-        autoscaling.knative.dev/targetUtilizationPercentage: 100
     spec: |
       predictor:
         imagePullSecrets:
