@@ -20,12 +20,13 @@ def make_llm():
         f"/v2/inference/deployments/{os.environ['AICORE_DEPLOYMENT_ID']}"
     )
     return AzureChatOpenAI(
-        openai_api_key=token,
-        openai_api_base=base_url,
-        openai_api_version="2024-02-01",
+        api_key=token,
+        azure_endpoint=base_url,
+        api_version="2024-02-01",
         deployment_name="gpt-4o",
         model_name="gpt-4o",
         temperature=0.3,
+        default_headers={"AI-Resource-Group": os.environ.get("AICORE_RESOURCE_GROUP", "default")},
     )
 
 def make_retriever():
