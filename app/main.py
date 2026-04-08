@@ -13,6 +13,11 @@ from auth import get_token
 
 load_dotenv()
 
+# Lazy globals — initialized on first request, not at startup
+_llm = None
+_retriever = None
+_chain = None
+
 def make_llm():
     token = get_token()
     base_url = (
@@ -42,20 +47,23 @@ def make_retriever():
     )
     return vectorstore.as_retriever(search_kwargs={"k": 4})
 
-# Initialise once at startup — not on every request
-llm = make_llm()
-retriever = make_retriever()
-memory = ConversationBufferWindowMemory(
-    memory_key="chat_history",
-    return_messages=True,
-    k=5,  # remember last 5 exchanges
-)
-chain = ConversationalRetrievalChain.from_llm(
-    llm=llm,
-    retriever=retriever,
-    memory=memory,
-    verbose=False,
-)
+def get_chain():
+    global _llm, _retriever, _chain
+    if _chain is None:
+        _llm = make_llm()
+        _retriever = make_retriever()
+        _memory = ConversationBufferWindowMemory(
+            memory_key="chat_history",
+            return_messages=True,
+            k=5,
+        )
+        _chain = ConversationalRetrievalChain.from_llm(
+            llm=_llm,
+            retriever=_retriever,
+            memory=_memory,
+            verbose=False,
+        )
+    return _chain
 
 app = FastAPI()
 
@@ -68,7 +76,7 @@ def health():
 
 @app.post("/v1/chat")
 async def chat(req: ChatRequest):
-    result = chain.invoke({"question": req.message})
+    result = get_chain().invoke({"question": req.message})
     return {"response": result["answer"]}
 
 if __name__ == "__main__":

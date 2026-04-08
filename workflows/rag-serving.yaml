@@ -66,3 +66,13 @@ spec:
                   secretKeyRef:
                     name: aicore-secret
                     key: CHROMA_PORT
+              - name: AICORE_API_URL
+                valueFrom:
+                  secretKeyRef:
+                    name: aicore-secret
+                    key: AICORE_API_URL
+              - name: AICORE_DEPLOYMENT_ID
+                valueFrom:
+                  secretKeyRef:
+                    name: aicore-secret
+                    key: AICORE_DEPLOYMENT_ID
