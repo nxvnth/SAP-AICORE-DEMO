@@ -25,6 +25,20 @@ spec:
             ports:
               - containerPort: 8080
                 protocol: TCP
+            livenessProbe:
+              httpGet:
+                path: /v1/health
+                port: 8080
+              initialDelaySeconds: 60
+              periodSeconds: 30
+              failureThreshold: 3
+            readinessProbe:
+              httpGet:
+                path: /v1/health
+                port: 8080
+              initialDelaySeconds: 60
+              periodSeconds: 10
+              failureThreshold: 5
             env:
               - name: AICORE_AUTH_URL
                 valueFrom:
