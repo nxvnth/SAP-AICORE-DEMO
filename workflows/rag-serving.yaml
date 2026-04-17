@@ -71,8 +71,13 @@ spec:
                   secretKeyRef:
                     name: aicore-secret
                     key: AICORE_API_URL
-              - name: AICORE_DEPLOYMENT_ID
+              # - name: AICORE_DEPLOYMENT_ID
+              #   valueFrom:
+              #     secretKeyRef:
+              #       name: aicore-secret
+              #       key: AICORE_DEPLOYMENT_ID
+              - name: GROQ_API_KEY
                 valueFrom:
                   secretKeyRef:
                     name: aicore-secret
-                    key: AICORE_DEPLOYMENT_ID
+                    key: GROQ_API_KEY
