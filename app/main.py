@@ -1,4 +1,8 @@
 import os, argparse
+# Must be set BEFORE any huggingface/transformers imports
+os.environ["HF_HOME"] = "/app/.cache/huggingface"
+os.environ["TRANSFORMERS_CACHE"] = "/app/.cache/huggingface"
+os.environ["SENTENCE_TRANSFORMERS_HOME"] = "/app/.cache/sentence_transformers"
 from fastapi import FastAPI
 from pydantic import BaseModel
 import uvicorn

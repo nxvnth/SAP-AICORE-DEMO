@@ -7,7 +7,13 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Bake HuggingFace Embeddings directly into Docker Image Cache to eliminate cold start internet dependencies
-RUN python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('all-MiniLM-L6-v2')"
+ENV HF_HOME=/app/.cache/huggingface
+ENV TRANSFORMERS_CACHE=/app/.cache/huggingface
+ENV SENTENCE_TRANSFORMERS_HOME=/app/.cache/sentence_transformers
+
+RUN mkdir -p /app/.cache/huggingface /app/.cache/sentence_transformers && \
+    chmod -R 777 /app/.cache && \
+    python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('all-MiniLM-L6-v2')"
 # Copy application code — .dockerignore ensures .env is never copied
 COPY main.py .
 COPY ingest.py .
